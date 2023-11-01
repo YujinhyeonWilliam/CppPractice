@@ -1,1 +1,2 @@
 C:\CppProjects\cppPractice\one_jblecture\Debug\one_jblecture.exe
+C:\Projects\CppPractice\one_jblecture\Debug\one_jblecture.exe
