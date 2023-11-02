@@ -1,15 +1,26 @@
+
+#pragma region  Forward Declartions
+
 #include <iostream>
 
-void func()
-{
-	std::cout << "Hello";
-}
+int add_numbers(int, int = 4);
+double add_numbers(double, double);
+
+#pragma endregion 
 
 int main()
 {
-	int a = 10;
 
-	func();
 
-	int b = 30;
+}
+
+
+int add_numbers(int a, int b)
+{
+	return a + b;
+}
+
+double add_numbers(double a, double b)
+{
+	return a + b;
 }
