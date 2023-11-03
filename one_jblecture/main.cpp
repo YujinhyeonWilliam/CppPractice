@@ -1,20 +1,14 @@
 #include <iostream>
 
-void swap(int& a, int& b);
+inline int add_numbers(int a, int b){
+	return a + b;
+}
 
 int main()
 {
-	int x = 10, y = 20;
-	std::cout << x << " " << y << std::endl;
-	swap(x, y);
-	std::cout << x << " " << y << std::endl;
+	int result;
+	result = add_numbers(100, 200);
 
 	return 0;
 }
 
-void swap(int& a, int& b)
-{
-	int temp = a;
-	a = b;
-	b = temp;
-}
