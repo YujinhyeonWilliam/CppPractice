@@ -1,14 +1,23 @@
 #include <iostream>
+using namespace std;
 
-inline int add_numbers(int a, int b){
-	return a + b;
+int* create_array(int size, int init_value = 0)
+{
+	int* new_storage = nullptr;
+	new_storage = new int[size];
+	for (int i = 0; i < size; i++)
+		*(new_storage + i) = init_value;
+
+	return new_storage;
 }
 
 int main()
 {
-	int result;
-	result = add_numbers(100, 200);
-
+	int a = 10;
+	int& b = a;
+	b = 20;
+	cout << a << endl;
+	
 	return 0;
 }
 
