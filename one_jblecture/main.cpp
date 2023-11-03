@@ -1,26 +1,20 @@
-
-#pragma region  Forward Declartions
-
 #include <iostream>
 
-int add_numbers(int, int = 4);
-double add_numbers(double, double);
-
-#pragma endregion 
+void swap(int& a, int& b);
 
 int main()
 {
+	int x = 10, y = 20;
+	std::cout << x << " " << y << std::endl;
+	swap(x, y);
+	std::cout << x << " " << y << std::endl;
 
-
+	return 0;
 }
 
-
-int add_numbers(int a, int b)
+void swap(int& a, int& b)
 {
-	return a + b;
-}
-
-double add_numbers(double a, double b)
-{
-	return a + b;
+	int temp = a;
+	a = b;
+	b = temp;
 }
