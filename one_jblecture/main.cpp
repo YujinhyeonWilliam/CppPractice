@@ -1,121 +1,57 @@
 #include <iostream>
-using namespace std;
 
-//class Player
-//{
-//private:
-//	int x, y;
-//	int speed;
-//public:
-//	Player(int x, int y, int speed)
-//		: x {x}, y {y}, speed { speed }
-//	{}
-//
-//	void Move(int dx, int dy)
-//	{
-//		x += dx * speed;
-//		y += dy * speed;
-//	}
-//	
-//	void ShowPosition() const
-//	{
-//		cout << x << ", " << y << endl;
-//	}
-//};
-//
-//
-//class PlayerHandler
-//{
-//private:
-//	Player* playerList[50];
-//	int playerNum;
-//public:
-//	PlayerHandler() : playerNum{ 0 }{}
-//
-//	~PlayerHandler()
-//	{
-//		for (int i = 0; i < playerNum; i++)
-//			delete playerList[i];
-//	}
-//	
-//	void AddPlayer(Player* player)
-//	{
-//		playerList[playerNum++] = player;
-//	}
-//
-//	void ShowAllPlayerPositions() const
-//	{
-//		for (int i = 0; i < playerNum; i++)
-//			playerList[i]->ShowPosition();
-//	}
-//
-//	
-//};
-
-
-class ItemData final
-{
-
-};
-
-class Entity 
-{
-protected:
-	int _x;
-	int _y;
-public:
-	Entity(int x, int y)
-		: _x{ x }, _y{ y } {}
-
-	virtual ~Entity()
-	{
-		cout << "Entity Destroyer called" << endl;
-	}
-
-	virtual void Move(int dx, int dy)
-	{
-		_x += dx;
-		_y += dy;
-	}
-
-	virtual void PrintPosition() const
-	{
-		std::cout << "Entity : " << _x << ", " << _y << std::endl;
-	}
-};
-
-class Player final : public Entity
+class Point
 {
 private:
-	int _hp;
-	int _xp;
+	int xPos;
+	int yPos;
 public:
-	Player(int x, int y, int hp, int exp)
-		: Entity {x, y}, _hp {hp}, _xp {exp} {}
+	Point(int xpos, int ypos)
+		: xPos{xpos}, yPos{ypos} {}
 	
-	~Player()
+	void PrintPosition()
 	{
-		cout << "Player Destroyer called" << endl;
+		std::cout << "[ Xpos = " << xPos << ", Ypos = " << yPos << " ]" << std::endl;
 	}
 
-	// override
-    void Move(int dx, int dy) override final
-	{
-		_x += dx * 2;
-		_y += dy * 2;
-	}
+#pragma region Binary Operator Overloading 
 
-	// override
-     void PrintPosition() const override
-	 {
-		std::cout << "Player : " << _x << ", " << _y << std::endl;
-	 }
+	// const로 멤버 변수가 변하지 않게끔 방지해주고, 복사 비용을 낮추기 위해서 인자에 const를 붙인 것. 함수에 const를 붙인 것은 나 자신(this) 또한 연산 도중 변하지 않도록 방지하기 위함.
+	Point operator+(const Point& target) const { return Point{ this->xPos + target.xPos, this->yPos + target.yPos }; }
+	Point operator-(const Point& target) const { return Point{ this->xPos - target.xPos, this->yPos - target.yPos }; }
+	Point operator*(const Point& target) const { return Point{ this->xPos * target.xPos, this->yPos * target.yPos }; }
+	Point operator/(const Point& target) const { return Point{ this->xPos / target.xPos, this->yPos / target.yPos }; }
+	Point operator%(const Point& target) const { return Point{ this->xPos % target.xPos, this->yPos % target.yPos }; }
+	bool operator==(const Point& target) const { return this->xPos == target.xPos && this->yPos == target.yPos; }
+
+	Point operator+(int val) const { return Point{ this->xPos + val, this->yPos + val }; }
+	Point operator-(int val) const { return Point{ this->xPos - val, this->yPos - val }; }
+	Point operator*(int val) const { return Point{ this->xPos * val, this->yPos * val }; }
+	Point operator/(int val) const { return Point{ this->xPos / val, this->yPos / val }; }
+	Point operator%(int val) const { return Point{ this->xPos % val, this->yPos % val }; }
+
+#pragma endregion
+
+#pragma region Unary Operator Overloading 
+
+	Point operator-() const { return Point{ -xPos, -yPos }; }
+	Point operator++() { return Point{ ++(this->xPos), ++(this->yPos) }; }
+	Point operator--() { return Point{ --(this->xPos), --(this->yPos) }; }
+	Point operator++(int) { return Point{ (this->xPos)++, (this->yPos)++ }; }
+	Point operator--(int) { return Point{ (this->xPos)--, (this->yPos)-- }; }
+
+#pragma endregion
+
 };
 
 int main()
 {
-	Player p{ 1,1,10,10 };
-	const Entity& e = p;
-	e.PrintPosition();
-
+	Point p1{ 2, 4 };
+	Point p2{ 2, 4 };
+	Point p3 = p1 + p2;
+	(-p3).PrintPosition();
+	(++p1).PrintPosition();
+	(p1++).PrintPosition();
+	(--p2).PrintPosition();
+	(p2--).PrintPosition();
 }
