@@ -2,10 +2,12 @@
 #include "Account.h"
 using namespace std;
 
-
 int main()
 {
-	Account _account = Account(30000);
-	Account _secondAccount = Account();
-	Account _thirdAccount = Account("Jinhyeon", 40000);
+	int* p1 = new int;
+	*p1 = 100;
+	int* p2 = p1;
+
+	delete p2;
+	delete p1;
 }
