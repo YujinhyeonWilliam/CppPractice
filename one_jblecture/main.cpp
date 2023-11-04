@@ -2,12 +2,49 @@
 #include "Account.h"
 using namespace std;
 
+class Player
+{
+private:
+	int x, y;
+	float speed;
+	static int numPlayer;
+public:
+
+#pragma region Constructor and Destoryer
+
+	Player(int x, int y, float speed)
+		: x{ x }, y{ y }, speed{ speed }
+	{
+		numPlayer++;
+	}
+	~Player()
+	{
+		numPlayer--;
+	}
+
+#pragma endregion
+
+	void SetPosition(int x, int y) {
+		this->x = x;
+		this->y = y;
+	}
+
+	void PrintPosition() const
+	{
+		cout << x << ", " << y << endl;
+	}
+
+	static int GetNumPlayer() { return numPlayer; }
+
+};
+
+int Player::numPlayer = 0;
+
 int main()
 {
-	int* p1 = new int;
-	*p1 = 100;
-	int* p2 = p1;
+    Player p{ 1,1,1 };
+	Player p2{ 1,1,1 };
+	Player Monster { 1,1,1 };
 
-	delete p2;
-	delete p1;
+	std::cout << Player::GetNumPlayer() << std::endl;
 }
