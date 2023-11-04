@@ -53,81 +53,69 @@ using namespace std;
 //};
 
 
+class ItemData final
+{
+
+};
+
 class Entity 
 {
 protected:
 	int _x;
 	int _y;
-
 public:
 	Entity(int x, int y)
-		: _x {x}, _y {y} {}
+		: _x{ x }, _y{ y } {}
 
-	void ShowPosition()
+	virtual ~Entity()
 	{
-		cout << "[" << _x << ", " << _y << "]" << endl;
+		cout << "Entity Destroyer called" << endl;
 	}
 
-	void Talk()
+	virtual void Move(int dx, int dy)
 	{
-		cout << "Hello" << endl;
+		_x += dx;
+		_y += dy;
 	}
 
-	Entity(const Entity& other)
+	virtual void PrintPosition() const
 	{
-
+		std::cout << "Entity : " << _x << ", " << _y << std::endl;
 	}
-
 };
 
-
-
-class Player : public Entity
+class Player final : public Entity
 {
 private:
-	int* _hp;
-	int* _xp;
-	int* _speed;
+	int _hp;
+	int _xp;
 public:
-
-	Player(int x, int y, int speed) : Entity{ x, y }, _speed{ new int } { *_speed = speed; }
+	Player(int x, int y, int hp, int exp)
+		: Entity {x, y}, _hp {hp}, _xp {exp} {}
+	
 	~Player()
 	{
-		delete _hp;
-		_hp = nullptr;
-		
-		delete _xp;
-		_xp = nullptr;
-
-		delete _speed;
-		_speed = nullptr;
+		cout << "Player Destroyer called" << endl;
 	}
 
-	void Move(int dx, int dy)
+	// override
+    void Move(int dx, int dy) override final
 	{
-		_x += dx * (*_speed);
-		_y += dy * (*_speed);
-	}
-	Player(const Player& player)
-		: Entity { player }, _hp { new int }, _xp { new int }, _speed { new int }
-	{
-		*_hp = *player._hp;
-		*_xp = *player._xp;
-		*_speed = *player._speed;
+		_x += dx * 2;
+		_y += dy * 2;
 	}
 
-	void Talk()
-	{
-		Entity::Talk();
-		cout << "I'm player." << endl;
-	}
+	// override
+     void PrintPosition() const override
+	 {
+		std::cout << "Player : " << _x << ", " << _y << std::endl;
+	 }
 };
 
 int main()
 {
-	Player player{ 5, 5, 10 };
-	player.ShowPosition();
-	player.Talk();
-	player.Move(1, 5);
-	player.ShowPosition();
+	Player p{ 1,1,10,10 };
+	const Entity& e = p;
+	e.PrintPosition();
+
 }
