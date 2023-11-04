@@ -1,18 +1,11 @@
 #include <iostream>
+#include "Account.h"
 using namespace std;
 
-struct Person
-{
-public:
-	string _name;
-	Person(string name)
-	{
-		_name = name;
-	}
-};
 
 int main()
 {
-	Person person { "Jinhyeon" };
-
+	Account _account = Account(30000);
+	Account _secondAccount = Account();
+	Account _thirdAccount = Account("Jinhyeon", 40000);
 }
