@@ -8,6 +8,7 @@ private:
 
 	// ★ 아래와 같이 Point class 내에 적어놨어도 아래 friend 형식의 operator 함수들은 '전역함수(global)'이다.
 	//	  이와 같이 하는 이유는 '교환 법칙' 성립을 위해서다.
+	// const 사용 이유는 값을 변경하지 못하도록 하는 것. 참조자 (&) 사용 이유는 객체를 복사하고 보내지 않도록 하기 위함
 
 	friend Point operator* (const int lhs, Point& rhs) { return Point{ rhs.xPos * lhs, rhs.yPos * lhs }; }
 	friend Point operator+ (const int lhs, Point& rhs) { return Point{ rhs.xPos + lhs, rhs.yPos + lhs }; }
@@ -27,6 +28,21 @@ private:
 	friend Point operator/ (const Point& lhs, const Point& rhs) { return Point{ lhs.xPos / rhs.xPos, lhs.yPos / rhs.yPos }; }
 	friend Point operator% (const Point& lhs, const Point& rhs) { return Point{ lhs.xPos % rhs.xPos, lhs.yPos % rhs.yPos }; }
 	
+	friend std::ostream& operator<< (std::ostream& os, const Point& rhs)
+	{
+		os << "[ Xpos = " << rhs.xPos << ", Ypos = " << rhs.yPos << " ]" << std::endl;
+		return os;
+	}
+
+	friend std::istream& operator>> (std::istream& is, Point& rhs)
+	{
+		int x = 0;
+		int y = 0;
+		is >> x >> y;
+		rhs = Point{ x, y };
+		return is;
+	}
+
 public:
 	Point(int xpos, int ypos)
 		: xPos{xpos}, yPos{ypos} {}
@@ -42,6 +58,22 @@ public:
 	Point operator--() { return Point{ --(this->xPos), --(this->yPos) }; }
 	Point operator++(int) { return Point{ (this->xPos)++, (this->yPos)++ }; }
 	Point operator--(int) { return Point{ (this->xPos)--, (this->yPos)-- }; }
+
+	Point()
+	{
+		xPos = 0;
+		yPos = 0;
+	}
+
+	Point& operator=(const Point& rhs)
+	{
+		if (this == &rhs)
+			return *this;
+
+		xPos = rhs.xPos;
+		yPos = rhs.yPos;
+		return *this;
+	}
 //#pragma region Member Operator Functions Overloading 
 //  
 //  #pragma region Binary Operator Overloading 
@@ -75,17 +107,74 @@ public:
 //#pragma endregion
 };
 
+
+class Array
+{
+private:
+	int* ptr;
+	int size;
+public:
+	Array(int value, int size)
+		: size {size}
+	{
+		ptr = new int[size];
+		
+		for (int i = 0; i < size; i++)
+			ptr[i] = value + i;
+	}
+
+	~Array() {
+		delete[] ptr;
+	}
+
+	Array& operator =(const Array& rhs)
+	{
+		if (this == &rhs)
+			return *this;
+		
+		delete[] ptr;
+
+		ptr = new int[rhs.size];
+		size = rhs.size;
+		for (int i = 0; i < size; i++)
+			ptr[i] = rhs.ptr[i];
+
+		return *this;
+	}
+
+
+	int GetSize() const
+	{
+		return size;
+	}
+
+	int& operator[](int index)
+	{
+		if (index < 0 || index >= size)
+		{
+			std::cout << "Out of range!" << std::endl;
+			exit(1);
+		}
+
+		return ptr[index];
+	}
+
+	int operator[](int index) const
+	{
+		if (index < 0 || index >= size)
+		{
+			std::cout << "Out of range!" << std::endl;
+			exit(1);
+		}
+
+		return ptr[index];
+	}
+};
+
+
 int main()
 {
-	Point p1{ 2, 4 };
-	Point p2{ 2, 4 };
-	Point p3 = p1 + 2;
-	p3 = 2 + p1;
-	Point p4 = p2 + p1;
-
-	(-p3).PrintPosition();
-	(++p1).PrintPosition();
-	(p1++).PrintPosition();
-	(--p2).PrintPosition();
-	(p2--).PrintPosition();
+	const Array a1{ 5, 10 };
+	
+	std::cout << a1[0] << std::endl;
 }
